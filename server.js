@@ -30,12 +30,11 @@ const requestListener = (req, res) => {
       try {
         const title = JSON.parse(body).title;
         if (title !== undefined) {
-          const todo = [
-            {
-              title: title,
-              id: uuidv4()
-            }
-          ]
+          const todo =
+          {
+            title: title,
+            id: uuidv4()
+          }
           todos.push(todo);
           res.writeHeader(200, headers);
           res.write(JSON.stringify({
@@ -50,6 +49,28 @@ const requestListener = (req, res) => {
         errorHandle(res);
       }
     });
+  } else if (req.url == '/todos' && req.method == 'DELETE') {
+    todos.length = 0;
+    res.writeHeader(200, headers);
+    res.write(JSON.stringify({
+      status: "success",
+      data: todos
+    }));
+    res.end();
+  } else if (req.url.startsWith('/todos/') && req.method == 'DELETE') {
+    const id = req.url.split('/').pop();
+    const index = todos.findIndex(element => element.id == id);
+    if (index !== -1) {
+      todos.splice(index, 1);
+      res.writeHeader(200, headers);
+      res.write(JSON.stringify({
+        status: "success",
+        data: todos
+      }));
+      res.end();
+    } else {
+      errorHandle(res);
+    }
   } else if (req.method == 'OPTIONS') {
     res.writeHeader(200, headers);
     res.end();
