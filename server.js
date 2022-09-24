@@ -2,15 +2,15 @@ const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const headers = require('./service/headers');
-const errorHandle = require('./errorHeader');
-const Post = require('./models/post');
+const { successHandle, errorHandle } = require('./service/handle');
+const Posts = require('./models/post');
 
 dotenv.config({ path: './config.env' });
 
 const DB = process.env.DATABASE.replace(
   '<password>',
   process.env.DATABASE_PASSWORD
-)
+);
 
 mongoose.connect(DB)
   .then(() => {
@@ -20,87 +20,69 @@ mongoose.connect(DB)
     console.log(err);
   })
 
-const todos = [];
-
-const requestListener = (req, res) => {
+const requestListener = async (req, res) => {
   let body = "";
 
   req.on('data', chunk => {
     body += chunk;
   });
 
-  if (req.url == '/todos' && req.method == 'GET') {
-    res.writeHeader(200, headers);
-    res.write(JSON.stringify({
-      status: "success",
-      data: todos
-    }));
-    res.end();
-  } else if (req.url == '/todos' && req.method == 'POST') {
-    req.on('end', () => {
+  if (req.url == '/posts' && req.method == 'GET') {
+    const allPosts = await Posts.find();
+    successHandle(res, '取得成功', allPosts);
+  } else if (req.url == '/posts' && req.method == 'POST') {
+    req.on('end', async () => {
       try {
-        const title = JSON.parse(body).title;
-        if (title !== undefined) {
-          const todo =
-          {
-            title: title,
-            id: uuidv4()
-          }
-          todos.push(todo);
-          res.writeHeader(200, headers);
-          res.write(JSON.stringify({
-            status: "success",
-            data: todos
-          }));
-          res.end();
+        const data = JSON.parse(body);
+        if (data.content !== '') {
+          const newPost = await Posts.create({
+            name: data.name,
+            tags: data.tags,
+            type: data.type,
+            content: data.content
+          });
+          successHandle(res, '新增成功', newPost);
         } else {
-          errorHandle(res);
+          errorHandle(res, '欄位沒有正確，或沒有此 ID');
         }
       } catch (error) {
-        errorHandle(res);
+        errorHandle(res, '欄位沒有正確，或沒有此 ID');
       }
-    });
-  } else if (req.url == '/todos' && req.method == 'DELETE') {
-    todos.length = 0;
-    res.writeHeader(200, headers);
-    res.write(JSON.stringify({
-      status: "success",
-      data: todos
-    }));
-    res.end();
-  } else if (req.url.startsWith('/todos/') && req.method == 'DELETE') {
-    const id = req.url.split('/').pop();
-    const index = todos.findIndex(element => element.id == id);
-    if (index !== -1) {
-      todos.splice(index, 1);
-      res.writeHeader(200, headers);
-      res.write(JSON.stringify({
-        status: "success",
-        data: todos
-      }));
-      res.end();
-    } else {
-      errorHandle(res);
+    })
+  } else if (req.url == '/posts' && req.method == 'DELETE') {
+    await Posts.deleteMany({});
+    const deleteAll = await Posts.find();
+    successHandle(res, '刪除成功', deleteAll);
+  } else if (req.url.startsWith('/posts/') && req.method == 'DELETE') {
+    try {
+      const id = await req.url.split('/').pop();
+      const deleteSingle = await Posts.findByIdAndDelete(id);
+      if (deleteSingle) {
+        successHandle(res, '刪除成功', deleteSingle);
+      } else {
+        errorHandle(res, '欄位沒有正確，或沒有此 ID');
+      }
+    } catch (error) {
+      errorHandle(res, '欄位沒有正確，或沒有此 ID');
     }
-  } else if (req.url.startsWith('/todos/') && req.method == 'PATCH') {
-    req.on('end', () => {
+  } else if (req.url.startsWith('/posts/') && req.method == 'PATCH') {
+    req.on('end', async () => {
       try {
-        const todo = JSON.parse(body).title;
         const id = req.url.split('/').pop();
-        const index = todos.findIndex(element => element.id == id);
-        if (todo !== undefined && index !== -1) {
-          todos[index].title = todo;
-          res.writeHeader(200, headers);
-          res.write(JSON.stringify({
-            status: "success",
-            data: todos
-          }));
-          res.end();
+        const data = JSON.parse(body);
+        const patchData = await Posts.findByIdAndUpdate(id, {
+          name: data.name,
+          tags: data.tags,
+          type: data.type,
+          content: data.content
+        }, { new: true });
+        if (data.content !== '' && patchData) {
+          successHandle(res, '更新成功', patchData);
         } else {
-          errorHandle(res);
+          errorHandle(res, '欄位沒有正確，或沒有此 ID');
         }
       } catch (error) {
-        errorHandle(res);
+        errorHandle(res, '欄位沒有正確，或沒有此 ID');
       }
     });
   } else if (req.method == 'OPTIONS') {
