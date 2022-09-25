@@ -24,8 +24,10 @@
     },
     "/api/posts": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "取得所有貼文",
         "parameters": [
           {
             "name": "timeSort",
@@ -39,22 +41,28 @@
         "responses": {}
       },
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "新增貼文",
         "parameters": [],
         "responses": {}
       },
       "delete": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "刪除所有貼文",
         "parameters": [],
         "responses": {}
       }
     },
     "/api/posts/{id}": {
       "delete": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "刪除單筆貼文",
         "parameters": [
           {
             "name": "id",
@@ -66,8 +74,10 @@
         "responses": {}
       },
       "patch": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "更改單筆貼文",
         "parameters": [
           {
             "name": "id",
@@ -81,28 +91,36 @@
     },
     "/api/users": {
       "get": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "取得所有使用者",
         "parameters": [],
         "responses": {}
       },
       "post": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "新增使用者",
         "parameters": [],
         "responses": {}
       },
       "delete": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "刪除全部使用者",
         "parameters": [],
         "responses": {}
       }
     },
     "/api/users/{id}": {
       "delete": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "刪除單筆使用者",
         "parameters": [
           {
             "name": "id",
@@ -114,8 +132,10 @@
         "responses": {}
       },
       "patch": {
-        "tags": [],
-        "description": "",
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "更改單筆使用者",
         "parameters": [
           {
             "name": "id",
