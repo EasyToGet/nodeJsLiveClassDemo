@@ -26,7 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', postsRouter);
 app.use('/api', usersRouter);
-app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));   //  生成 API 文件
+app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));   //  swagger API 文件網址路徑
 app.use(notFound);
 
 module.exports = app;

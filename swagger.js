@@ -7,6 +7,22 @@ const doc = {
   },
   host: 'localhost:3000',
   schemes: ['http', 'https'],
+  securityDefinitions: {
+    apiKeyAuth: {
+      type: 'apiKey',
+      in: 'headers',
+      name: 'authorization',
+      description: '請加上 API Token'
+    }
+  },
+  definitions: {
+    createdPostsSchema: {
+      $user: '63306ad1f2b86f0db81b4b28',
+      $tags: '忍者',
+      $type: 'person',
+      $content: '我是漩渦鳴人'
+    }
+  }
 };
 
 const outputFile = './swagger-output.json';
