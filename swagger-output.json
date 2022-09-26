@@ -1,0 +1,334 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Meta API",
+    "description": "示範範例生成文件"
+  },
+  "host": "localhost:3000",
+  "basePath": "/",
+  "tags": [],
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "securityDefinitions": {
+    "apiKeyAuth": {
+      "type": "apiKey",
+      "in": "headers",
+      "name": "authorization",
+      "description": "請加上 API Token"
+    }
+  },
+  "consumes": [],
+  "produces": [],
+  "paths": {
+    "/api/posts": {
+      "get": {
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "取得所有貼文",
+        "parameters": [
+          {
+            "name": "timeSort",
+            "in": "query"
+          },
+          {
+            "name": "keyword",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Some description...",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "63306b16f2b86f0db81b4b3c"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "63306ad1f2b86f0db81b4b28"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "John"
+                          },
+                          "photo": {
+                            "type": "string",
+                            "example": "vvvv"
+                          }
+                        }
+                      },
+                      "tags": {
+                        "type": "string",
+                        "example": "忍者"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "person"
+                      },
+                      "image": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "content": {
+                        "type": "string",
+                        "example": "我是漩渦鳴人"
+                      },
+                      "likes": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "comments": {
+                        "type": "number",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "新增貼文",
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "type": "object",
+            "required": true,
+            "description": "資料格式",
+            "schema": {
+              "$ref": "#/definitions/createdPostsSchema"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Some description...",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "status": {
+                  "type": "boolean",
+                  "example": true
+                },
+                "data": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "_id": {
+                        "type": "string",
+                        "example": "63306b16f2b86f0db81b4b3c"
+                      },
+                      "user": {
+                        "type": "object",
+                        "properties": {
+                          "_id": {
+                            "type": "string",
+                            "example": "63306ad1f2b86f0db81b4b28"
+                          },
+                          "name": {
+                            "type": "string",
+                            "example": "John"
+                          },
+                          "photo": {
+                            "type": "string",
+                            "example": "vvvv"
+                          }
+                        }
+                      },
+                      "tags": {
+                        "type": "string",
+                        "example": "忍者"
+                      },
+                      "type": {
+                        "type": "string",
+                        "example": "person"
+                      },
+                      "image": {
+                        "type": "string",
+                        "example": ""
+                      },
+                      "content": {
+                        "type": "string",
+                        "example": "我是漩渦鳴人"
+                      },
+                      "likes": {
+                        "type": "number",
+                        "example": 0
+                      },
+                      "comments": {
+                        "type": "number",
+                        "example": 0
+                      }
+                    }
+                  }
+                }
+              },
+              "xml": {
+                "name": "main"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "刪除所有貼文",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/posts/{id}": {
+      "delete": {
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "刪除單筆貼文",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "apiKeyAuth": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Posts - 貼文"
+        ],
+        "description": "更改單筆貼文",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    },
+    "/api/users": {
+      "get": {
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "取得所有使用者",
+        "parameters": [],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "新增使用者",
+        "parameters": [],
+        "responses": {}
+      },
+      "delete": {
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "刪除全部使用者",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/users/{id}": {
+      "delete": {
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "刪除單筆使用者",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "patch": {
+        "tags": [
+          "Users - 使用者"
+        ],
+        "description": "更改單筆使用者",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      }
+    }
+  },
+  "definitions": {
+    "createdPostsSchema": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string",
+          "example": "63306ad1f2b86f0db81b4b28"
+        },
+        "tags": {
+          "type": "string",
+          "example": "忍者"
+        },
+        "type": {
+          "type": "string",
+          "example": "person"
+        },
+        "content": {
+          "type": "string",
+          "example": "我是漩渦鳴人"
+        }
+      },
+      "required": [
+        "user",
+        "tags",
+        "type",
+        "content"
+      ]
+    }
+  }
+}

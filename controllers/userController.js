@@ -4,10 +4,18 @@ const User = require('../models/userModel');
 
 const users = {
   async getUser(req, res) {
+    /**
+    * #swagger.tags = ['Users - 使用者']
+    * #swagger.description = '取得所有使用者'
+    */
     const allUsers = await User.find();
     handleSuccess(res, '取得成功', allUsers);
   },
   async createdUsers(req, res) {
+    /**
+    * #swagger.tags = ['Users - 使用者']
+    * #swagger.description = '新增使用者'
+    */
     try {
       const data = req.body;
       console.log(data.email);
@@ -27,6 +35,10 @@ const users = {
     }
   },
   async deleteAll(req, res) {
+    /**
+    * #swagger.tags = ['Users - 使用者']
+    * #swagger.description = '刪除全部使用者'
+    */
     // 取出 req 的 Url，再判斷是否等於 '/api/users/'
     if (req.originalUrl == '/api/users/') {
       handleError(res, '刪除失敗，查無此 ID');
@@ -37,6 +49,10 @@ const users = {
     }
   },
   async deleteSingle(req, res) {
+    /**
+    * #swagger.tags = ['Users - 使用者']
+    * #swagger.description = '刪除單筆使用者'
+    */
     try {
       const id = req.params.id;
       const deleteSingle = await User.findByIdAndDelete(id);
@@ -51,6 +67,10 @@ const users = {
     }
   },
   async updateUsers(req, res) {
+    /**
+    * #swagger.tags = ['Users - 使用者']
+    * #swagger.description = '更改單筆使用者'
+    */
     try {
       const id = req.params.id;
       const data = req.body;

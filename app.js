@@ -3,6 +3,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const cors = require('cors'); 
+const swaggerUI = require('swagger-ui-express');    //  載入 swagger UI 套件
+const swaggerFile = require('./swagger-output.json');   //  載入 swagger 輸出文件
+
 const { notFound } = require('./service/http');
 
 var indexRouter = require('./routes/index');
@@ -23,6 +26,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/api', postsRouter);
 app.use('/api', usersRouter);
+app.use('/api-doc', swaggerUI.serve, swaggerUI.setup(swaggerFile));   //  swagger API 文件網址路徑
 app.use(notFound);
 
 module.exports = app;

@@ -4,6 +4,32 @@ const Post = require('../models/postsModel');
 
 const posts = {
   async getPosts(req, res) {
+    /**
+     * #swagger.tags = ['Posts - 貼文']
+     * #swagger.description = '取得所有貼文'
+     * #swagger.responses[200] = {
+        description: 'Some description...',
+        schema: {
+          "status": true,
+          "data": [
+            {
+              "_id": "63306b16f2b86f0db81b4b3c",
+              "user": {
+                "_id": "63306ad1f2b86f0db81b4b28",
+                "name": "John",
+                "photo": "vvvv"
+              },
+              "tags": "忍者",
+              "type": "person",
+              "image": "",
+              "content": "我是漩渦鳴人",
+              "likes": 0,
+              "comments": 0
+            }
+          ]
+        }
+      }
+    */
     // asc 遞增 (由小到大，由舊到新): "createdAt" ; desc 遞減 (由大到小、由新到舊): "-createdAt"
     const timeSort = req.query.timeSort === "asc" ? "createdAt" : "-createdAt";
     // new RegExp() 將字串轉成正規表達式，例如: "cool" -> /cool/
@@ -15,15 +41,52 @@ const posts = {
     handleSuccess(res, '取得成功', allPosts);
   },
   async createdPosts(req, res) {
+    /**
+    * #swagger.tags = ['Posts - 貼文']
+    * #swagger.description = '新增貼文'
+    */
     try {
       const data = req.body;
       if (data.content) {
+        /*
+          #swagger.parameters['body'] = {
+            in: 'body',
+            type: 'object',
+            required: true,
+            description: '資料格式',
+            schema: { $ref: "#/definitions/createdPostsSchema" }
+          }
+        */
         const newPost = await Post.create({
           user: data.user,
           tags: data.tags,
           type: data.type,
           content: data.content
         })
+        /*
+          #swagger.responses[200] = {
+            description: 'Some description...',
+            schema: {
+              "status": true,
+              "data": [
+                {
+                  "_id": "63306b16f2b86f0db81b4b3c",
+                  "user": {
+                    "_id": "63306ad1f2b86f0db81b4b28",
+                    "name": "John",
+                    "photo": "vvvv"
+                  },
+                  "tags": "忍者",
+                  "type": "person",
+                  "image": "",
+                  "content": "我是漩渦鳴人",
+                  "likes": 0,
+                  "comments": 0
+                }
+              ]
+            }
+          }
+        */
         handleSuccess(res, '新增成功', newPost);
       } else {
         handleError(res, '欄位是空的，請填寫');
@@ -33,6 +96,10 @@ const posts = {
     }
   },
   async deleteAll(req, res) {
+    /**
+    * #swagger.tags = ['Posts - 貼文']
+    * #swagger.description = '刪除所有貼文'
+    */
     // 取出 req 的 Url，再判斷是否等於 '/api/posts/'
     if (req.originalUrl == '/api/posts/') {
       handleError(res, '刪除失敗，查無此 ID');
@@ -43,6 +110,11 @@ const posts = {
     }
   },
   async deleteSingle(req, res) {
+    /**
+    * #swagger.tags = ['Posts - 貼文']
+    * #swagger.description = '刪除單筆貼文'
+    * #swagger.security = [{ "apiKeyAuth": [] }]
+    */
     try {
       const id = req.params.id;
       const deleteSingle = await Post.findByIdAndDelete(id);
@@ -57,6 +129,15 @@ const posts = {
     }
   },
   async patchPosts(req, res) {
+    /**
+    * #swagger.tags = ['Posts - 貼文']
+    * #swagger.description = '更改單筆貼文'
+    * $swagger.parameters['id'] = {
+        in: 'path',
+        type: 'string',
+        required: true,
+      }
+    */
     try {
       const id = req.params.id;
       const data = req.body;
